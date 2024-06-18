@@ -192,6 +192,7 @@
   "clash_mode_global": "Глобальный режим",
   "clash_mode_direct": "Прямой режим",
   "toggle_system_proxy": "Включить/Отключить системный прокси",
+  "toggle_git_proxy": "Enable/Disable Git Proxy",
   "toggle_tun_mode": "Включить/Отключить режим туннеля",
 
   "App Log Level": "Уровень журнала приложения",

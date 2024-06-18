@@ -125,6 +125,7 @@ const SettingVerge = ({ onError }: Props) => {
             <Select size="small" sx={{ width: 140, "> div": { py: "7.5px" } }}>
               <MenuItem value="main_window">{t("Show Main Window")}</MenuItem>
               <MenuItem value="system_proxy">{t("System Proxy")}</MenuItem>
+              <MenuItem value="git_proxy">{t("Git Proxy")}</MenuItem>
               <MenuItem value="tun_mode">{t("Tun Mode")}</MenuItem>
               <MenuItem value="disable">{t("Disable")}</MenuItem>
             </Select>

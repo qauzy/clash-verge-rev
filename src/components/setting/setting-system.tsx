@@ -38,6 +38,7 @@ const SettingSystem = ({ onError }: Props) => {
     enable_service_mode,
     enable_silent_start,
     enable_system_proxy,
+    enable_git_proxy,
   } = verge ?? {};
 
   const onSwitchFormat = (_e: any, value: boolean) => value;
@@ -147,6 +148,18 @@ const SettingSystem = ({ onError }: Props) => {
         </GuardState>
       </SettingItem>
 
+      <SettingItem label={t("Git Proxy")}>
+        <GuardState
+          value={enable_git_proxy ?? false}
+          valueProps="checked"
+          onCatch={onError}
+          onFormat={onSwitchFormat}
+          onChange={(e) => onChangeData({ enable_git_proxy: e })}
+          onGuard={(e) => patchVerge({ enable_git_proxy: e })}
+        >
+          <Switch edge="end" />
+        </GuardState>
+      </SettingItem>
       <SettingItem label={t("Auto Launch")}>
         <GuardState
           value={enable_auto_launch ?? false}

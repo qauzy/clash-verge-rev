@@ -192,6 +192,7 @@
   "clash_mode_global": "حالت جهانی",
   "clash_mode_direct": "حالت مستقیم",
   "toggle_system_proxy": "فعال/غیرفعال کردن پراکسی سیستم",
+  "toggle_git_proxy": "Enable/Disable Git Proxy",
   "toggle_tun_mode": "فعال/غیرفعال کردن حالت Tun",
 
   "App Log Level": "سطح لاگ برنامه",

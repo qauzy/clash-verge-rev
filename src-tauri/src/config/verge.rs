@@ -72,6 +72,9 @@ pub struct IVerge {
     /// set system proxy
     pub enable_system_proxy: Option<bool>,
 
+        /// set git proxy
+    pub enable_git_proxy: Option<bool>,
+
     /// enable proxy guard
     pub enable_proxy_guard: Option<bool>,
 
@@ -218,6 +221,7 @@ impl IVerge {
             enable_auto_launch: Some(false),
             enable_silent_start: Some(false),
             enable_system_proxy: Some(false),
+            enable_git_proxy: Some(false),
             proxy_auto_config: Some(false),
             pac_file_content: Some(DEFAULT_PAC.into()),
             enable_random_port: Some(false),
@@ -296,6 +300,7 @@ impl IVerge {
         patch!(verge_port);
         patch!(verge_http_enabled);
         patch!(enable_system_proxy);
+        patch!(enable_git_proxy);
         patch!(enable_proxy_guard);
         patch!(system_proxy_bypass);
         patch!(proxy_guard_duration);

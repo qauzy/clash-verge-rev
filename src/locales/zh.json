@@ -115,6 +115,7 @@
   "Auto Launch": "开机自启",
   "Silent Start": "静默启动",
   "System Proxy": "系统代理",
+  "Git Proxy": "Git代理",
   "System Proxy Setting": "系统代理设置",
   "Open UWP tool": "UWP 工具",
   "Update GeoData": "更新 GeoData",
@@ -192,6 +193,7 @@
   "clash_mode_global": "全局模式",
   "clash_mode_direct": "直连模式",
   "toggle_system_proxy": "打开/关闭系统代理",
+  "toggle_git_proxy": "打开/关闭Git代理",
   "toggle_tun_mode": "打开/关闭 Tun 模式",
 
   "App Log Level": "App日志等级",

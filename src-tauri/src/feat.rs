@@ -177,6 +177,7 @@ pub async fn patch_verge(patch: IVerge) -> Result<()> {
     let tun_mode = patch.enable_tun_mode;
     let auto_launch = patch.enable_auto_launch;
     let system_proxy = patch.enable_system_proxy;
+    let git_proxy = patch.enable_git_proxy;
     let pac = patch.proxy_auto_config;
     let pac_content = patch.pac_file_content;
     let proxy_bypass = patch.system_proxy_bypass;
@@ -226,6 +227,7 @@ pub async fn patch_verge(patch: IVerge) -> Result<()> {
             || port.is_some()
             || pac.is_some()
             || pac_content.is_some()
+            || git_proxy.is_some()
         {
             sysopt::Sysopt::global().update_sysproxy()?;
             sysopt::Sysopt::global().guard_proxy();

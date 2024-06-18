@@ -19,6 +19,7 @@ const HOTKEY_FUNC = [
   "clash_mode_global",
   "clash_mode_direct",
   "toggle_system_proxy",
+  "toggle_git_proxy",
   "toggle_tun_mode",
 ];
 

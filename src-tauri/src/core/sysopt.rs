@@ -40,6 +40,27 @@ static DEFAULT_BYPASS: &str = "localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172
 #[cfg(target_os = "macos")]
 static DEFAULT_BYPASS: &str =
     "127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,localhost,*.local,*.crashlytics.com,<local>";
+// Define a function to set Git proxy
+fn set_git_proxy(enable: bool, host: &str, port: u16) -> Result<()> {
+    if enable {
+        // Set Git HTTP and HTTPS proxy
+        std::process::Command::new("git")
+            .args(&["config", "--global", "http.proxy", &format!("http://{}:{}", host, port)])
+            .status()?;
+        std::process::Command::new("git")
+            .args(&["config", "--global", "https.proxy", &format!("http://{}:{}", host, port)])
+            .status()?;
+    } else {
+        // Unset Git HTTP and HTTPS proxy
+        std::process::Command::new("git")
+            .args(&["config", "--global", "--unset", "http.proxy"])
+            .status()?;
+        std::process::Command::new("git")
+            .args(&["config", "--global", "--unset", "https.proxy"])
+            .status()?;
+    }
+    Ok(())
+}
 
 impl Sysopt {
     pub fn global() -> &'static Sysopt {
@@ -57,21 +78,27 @@ impl Sysopt {
 
     /// init the sysproxy
     pub fn init_sysproxy(&self) -> Result<()> {
+
+
         let port = Config::verge()
             .latest()
             .verge_mixed_port
             .unwrap_or(Config::clash().data().get_mixed_port());
         let pac_port = IVerge::get_singleton_port();
 
-        let (enable, bypass, pac) = {
+        let (enable,git, bypass, pac) = {
             let verge = Config::verge();
             let verge = verge.latest();
             (
                 verge.enable_system_proxy.unwrap_or(false),
+                verge.enable_git_proxy.unwrap_or(false),
                 verge.system_proxy_bypass.clone(),
                 verge.proxy_auto_config.unwrap_or(false),
             )
         };
+
+        // Set Git proxy if enabled
+        set_git_proxy(git, "127.0.0.1", port)?;
         let mut sys = Sysproxy {
             enable,
             host: String::from("127.0.0.1"),
@@ -127,11 +154,12 @@ impl Sysopt {
         let mut cur_autoproxy = self.cur_autoproxy.lock();
         let old_autoproxy = self.old_autoproxy.lock();
 
-        let (enable, bypass, pac) = {
+        let (enable, git, bypass, pac) = {
             let verge = Config::verge();
             let verge = verge.latest();
             (
                 verge.enable_system_proxy.unwrap_or(false),
+                verge.enable_git_proxy.unwrap_or(false),
                 verge.system_proxy_bypass.clone(),
                 verge.proxy_auto_config.unwrap_or(false),
             )
@@ -168,6 +196,7 @@ impl Sysopt {
         };
         sysproxy.port = port;
 
+        set_git_proxy(git, "127.0.0.1", port)?;
         let mut autoproxy = cur_autoproxy.take().unwrap();
         autoproxy.url = format!("http://127.0.0.1:{pac_port}/commands/pac");
 
@@ -349,11 +378,12 @@ impl Sysopt {
             loop {
                 sleep(Duration::from_secs(wait_secs)).await;
 
-                let (enable, guard, guard_duration, bypass, pac) = {
+                let (enable,git, guard, guard_duration, bypass, pac) = {
                     let verge = Config::verge();
                     let verge = verge.latest();
                     (
                         verge.enable_system_proxy.unwrap_or(false),
+                        verge.enable_git_proxy.unwrap_or(false),
                         verge.enable_proxy_guard.unwrap_or(false),
                         verge.proxy_guard_duration.unwrap_or(10),
                         verge.system_proxy_bypass.clone(),
@@ -364,6 +394,10 @@ impl Sysopt {
                 // stop loop
                 if !enable || !guard {
                     break;
+                }
+
+                if git{
+
                 }
 
                 // update duration
