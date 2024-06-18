@@ -324,7 +324,7 @@ impl Tray {
             #[cfg(not(target_os = "macos"))]
             SystemTrayEvent::LeftClick { .. } => Tray::on_click(app_handle),
             #[cfg(target_os = "macos")]
-            SystemTrayEvent::RightClick { .. } => Tray::on_click(app_handle),
+            SystemTrayEvent::LeftClick { .. } => Tray::on_click(app_handle),
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 mode @ ("rule_mode" | "global_mode" | "direct_mode") => {
                     let mode = &mode[0..mode.len() - 5];
