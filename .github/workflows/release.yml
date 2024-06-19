@@ -61,7 +61,7 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_PRIVATE_KEY: "dW50cnVzdGVkIGNvbW1lbnQ6IHJzaWduIGVuY3J5cHRlZCBzZWNyZXQga2V5ClJXUlRZMEl5amQ5ZUFNd3piZGhpRGFreFFhVlhPRWs1eTRvVE9oV1FseFpieW5Pcmhwa0FBQkFBQUFBQUFBQUFBQUlBQUFBQWJnbzdyWUpubkhNK2t0a0s0UmtINDFSUzlram9KbWdHUzRNZzFhSk10YUpmS0lxd3E0KzBsVTl5L1J0VGM1NVArUFpZSlA5ME5TYlFaa2xsbUx1QzlUZnVRaVVPWXBKY3pMVTJrSHFydW9GcFdGWUhlWkRjVkw4bEMwa3UxTTJHSVpUWnN2OUYyR0k9Cg=="
           TAURI_KEY_PASSWORD: ""
         with:
           tagName: v__VERSION__
@@ -98,7 +98,7 @@ jobs:
         uses: ./.github/build-for-linux
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
-          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_PRIVATE_KEY: "dW50cnVzdGVkIGNvbW1lbnQ6IHJzaWduIGVuY3J5cHRlZCBzZWNyZXQga2V5ClJXUlRZMEl5amQ5ZUFNd3piZGhpRGFreFFhVlhPRWs1eTRvVE9oV1FseFpieW5Pcmhwa0FBQkFBQUFBQUFBQUFBQUlBQUFBQWJnbzdyWUpubkhNK2t0a0s0UmtINDFSUzlram9KbWdHUzRNZzFhSk10YUpmS0lxd3E0KzBsVTl5L1J0VGM1NVArUFpZSlA5ME5TYlFaa2xsbUx1QzlUZnVRaVVPWXBKY3pMVTJrSHFydW9GcFdGWUhlWkRjVkw4bEMwa3UxTTJHSVpUWnN2OUYyR0k9Cg=="
           TAURI_KEY_PASSWORD: ""
         with:
           target: ${{ matrix.target }}
@@ -186,7 +186,7 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_PRIVATE_KEY: "dW50cnVzdGVkIGNvbW1lbnQ6IHJzaWduIGVuY3J5cHRlZCBzZWNyZXQga2V5ClJXUlRZMEl5amQ5ZUFNd3piZGhpRGFreFFhVlhPRWs1eTRvVE9oV1FseFpieW5Pcmhwa0FBQkFBQUFBQUFBQUFBQUlBQUFBQWJnbzdyWUpubkhNK2t0a0s0UmtINDFSUzlram9KbWdHUzRNZzFhSk10YUpmS0lxd3E0KzBsVTl5L1J0VGM1NVArUFpZSlA5ME5TYlFaa2xsbUx1QzlUZnVRaVVPWXBKY3pMVTJrSHFydW9GcFdGWUhlWkRjVkw4bEMwa3UxTTJHSVpUWnN2OUYyR0k9Cg=="
           TAURI_KEY_PASSWORD: ""
         with:
           tauriScript: pnpm
