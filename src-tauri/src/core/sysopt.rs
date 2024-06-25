@@ -11,6 +11,9 @@ use std::sync::Arc;
 use sysproxy::{Autoproxy, Sysproxy};
 use tauri::async_runtime::Mutex as TokioMutex;
 
+use std::process::Command;
+use std::io::{self, ErrorKind};
+
 pub struct Sysopt {
     /// current system proxy setting
     cur_sysproxy: Arc<Mutex<Option<Sysproxy>>>,
@@ -40,8 +43,27 @@ static DEFAULT_BYPASS: &str = "localhost,127.0.0.1,192.168.0.0/16,10.0.0.0/8,172
 #[cfg(target_os = "macos")]
 static DEFAULT_BYPASS: &str =
     "127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,localhost,*.local,*.crashlytics.com,<local>";
+
+fn git_installed() -> bool {
+    Command::new("git")
+        .arg("--version")
+        .status()
+        .map(|status| status.success())
+        .unwrap_or(false)
+}
+
+
 // Define a function to set Git proxy
-fn set_git_proxy(enable: bool, host: &str, port: u16) -> Result<()> {
+fn set_git_proxy(enable: bool, host: &str, port: u16) -> io::Result<()>  {
+    if !git_installed() {
+        if enable {
+            return Err(io::Error::new(ErrorKind::NotFound, "git command not found"));
+        } else {
+            // If git is not installed and enable is false, do nothing.
+            return Ok(());
+        }
+    }
+
     if enable {
         // Set Git HTTP and HTTPS proxy
         std::process::Command::new("git")
