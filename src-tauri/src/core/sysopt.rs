@@ -16,8 +16,6 @@ use std::io::{self, ErrorKind};
 #[cfg(target_os = "windows")]
 use std::os::windows::process::CommandExt;
 
-#[cfg(target_os = "windows")]
-use winapi::um::winbase::CREATE_NO_WINDOW;
 
 pub struct Sysopt {
     /// current system proxy setting
@@ -55,7 +53,7 @@ fn git_installed() -> bool {
 
     #[cfg(target_os = "windows")]
     {
-        command.creation_flags(CREATE_NO_WINDOW);
+        command.creation_flags(0x08000000);
     }
 
     command.status()
