@@ -53,36 +53,6 @@ fn git_installed() -> bool {
 }
 
 
-// Define a function to set Git proxy
-fn set_git_proxy(enable: bool, host: &str, port: u16) -> io::Result<()>  {
-    if !git_installed() {
-        if enable {
-            return Err(io::Error::new(ErrorKind::NotFound, "git command not found"));
-        } else {
-            // If git is not installed and enable is false, do nothing.
-            return Ok(());
-        }
-    }
-
-    if enable {
-        // Set Git HTTP and HTTPS proxy
-        std::process::Command::new("git")
-            .args(&["config", "--global", "http.proxy", &format!("http://{}:{}", host, port)])
-            .status()?;
-        std::process::Command::new("git")
-            .args(&["config", "--global", "https.proxy", &format!("http://{}:{}", host, port)])
-            .status()?;
-    } else {
-        // Unset Git HTTP and HTTPS proxy
-        std::process::Command::new("git")
-            .args(&["config", "--global", "--unset", "http.proxy"])
-            .status()?;
-        std::process::Command::new("git")
-            .args(&["config", "--global", "--unset", "https.proxy"])
-            .status()?;
-    }
-    Ok(())
-}
 
 impl Sysopt {
     pub fn global() -> &'static Sysopt {
@@ -108,19 +78,16 @@ impl Sysopt {
             .unwrap_or(Config::clash().data().get_mixed_port());
         let pac_port = IVerge::get_singleton_port();
 
-        let (enable,git, bypass, pac) = {
+        let (enable, bypass, pac) = {
             let verge = Config::verge();
             let verge = verge.latest();
             (
                 verge.enable_system_proxy.unwrap_or(false),
-                verge.enable_git_proxy.unwrap_or(false),
                 verge.system_proxy_bypass.clone(),
                 verge.proxy_auto_config.unwrap_or(false),
             )
         };
 
-        // Set Git proxy if enabled
-        set_git_proxy(git, "127.0.0.1", port)?;
         let mut sys = Sysproxy {
             enable,
             host: String::from("127.0.0.1"),
@@ -168,6 +135,42 @@ impl Sysopt {
         self.guard_proxy();
         Ok(())
     }
+
+    // Define a function to set Git proxy
+    pub fn set_git_proxy(&self,enable: bool) -> io::Result<()>  {
+        if !git_installed() {
+            if enable {
+                return Err(io::Error::new(ErrorKind::NotFound, "git command not found"));
+            } else {
+                // If git is not installed and enable is false, do nothing.
+                return Ok(());
+            }
+        }
+        let port = Config::verge()
+            .latest()
+            .verge_mixed_port
+            .unwrap_or(Config::clash().data().get_mixed_port());
+
+        if enable {
+            // Set Git HTTP and HTTPS proxy
+            std::process::Command::new("git")
+                .args(&["config", "--global", "http.proxy", &format!("http://127.0.0.1:{}", port)])
+                .status()?;
+            std::process::Command::new("git")
+                .args(&["config", "--global", "https.proxy", &format!("http://127.0.0.1:{}", port)])
+                .status()?;
+        } else {
+            // Unset Git HTTP and HTTPS proxy
+            std::process::Command::new("git")
+                .args(&["config", "--global", "--unset", "http.proxy"])
+                .status()?;
+            std::process::Command::new("git")
+                .args(&["config", "--global", "--unset", "https.proxy"])
+                .status()?;
+        }
+        Ok(())
+    }
+
 
     /// update the system proxy
     pub fn update_sysproxy(&self) -> Result<()> {
@@ -217,8 +220,9 @@ impl Sysopt {
             None => DEFAULT_BYPASS.into(),
         };
         sysproxy.port = port;
-
-        set_git_proxy(git, "127.0.0.1", port)?;
+        if git_installed() {
+            self.set_git_proxy(git)?;
+        }
         let mut autoproxy = cur_autoproxy.take().unwrap();
         autoproxy.url = format!("http://127.0.0.1:{pac_port}/commands/pac");
 

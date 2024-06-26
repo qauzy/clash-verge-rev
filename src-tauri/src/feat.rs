@@ -237,6 +237,12 @@ pub async fn patch_verge(patch: IVerge) -> Result<()> {
             sysopt::Sysopt::global().guard_proxy();
         }
 
+        if let Some(true) = git_proxy {
+            sysopt::Sysopt::global().set_git_proxy(true);
+        }else{
+            sysopt::Sysopt::global().set_git_proxy(false);
+        }
+
         if let Some(hotkeys) = patch.hotkeys {
             hotkey::Hotkey::global().update(hotkeys)?;
         }
