@@ -13,6 +13,11 @@ use tauri::async_runtime::Mutex as TokioMutex;
 
 use std::process::Command;
 use std::io::{self, ErrorKind};
+#[cfg(target_os = "windows")]
+use std::os::windows::process::CommandExt;
+
+#[cfg(target_os = "windows")]
+use winapi::um::winbase::CREATE_NO_WINDOW;
 
 pub struct Sysopt {
     /// current system proxy setting
@@ -45,9 +50,15 @@ static DEFAULT_BYPASS: &str =
     "127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,localhost,*.local,*.crashlytics.com,<local>";
 
 fn git_installed() -> bool {
-    Command::new("git")
-        .arg("--version")
-        .status()
+    let mut command = Command::new("git");
+    command.arg("--version");
+
+    #[cfg(target_os = "windows")]
+    {
+        command.creation_flags(CREATE_NO_WINDOW);
+    }
+
+    command.status()
         .map(|status| status.success())
         .unwrap_or(false)
 }
@@ -137,7 +148,7 @@ impl Sysopt {
     }
 
     // Define a function to set Git proxy
-    pub fn set_git_proxy(&self,enable: bool) -> io::Result<()>  {
+    pub fn set_git_proxy(&self, enable: bool) -> io::Result<()> {
         if !git_installed() {
             if enable {
                 return Err(io::Error::new(ErrorKind::NotFound, "git command not found"));
@@ -146,6 +157,7 @@ impl Sysopt {
                 return Ok(());
             }
         }
+
         let port = Config::verge()
             .latest()
             .verge_mixed_port
@@ -153,20 +165,29 @@ impl Sysopt {
 
         if enable {
             // Set Git HTTP and HTTPS proxy
-            std::process::Command::new("git")
-                .args(&["config", "--global", "http.proxy", &format!("http://127.0.0.1:{}", port)])
-                .status()?;
-            std::process::Command::new("git")
-                .args(&["config", "--global", "https.proxy", &format!("http://127.0.0.1:{}", port)])
-                .status()?;
+            self.run_git_command(&["config", "--global", "http.proxy", &format!("http://127.0.0.1:{}", port)])?;
+            self.run_git_command(&["config", "--global", "https.proxy", &format!("http://127.0.0.1:{}", port)])?;
         } else {
             // Unset Git HTTP and HTTPS proxy
-            std::process::Command::new("git")
-                .args(&["config", "--global", "--unset", "http.proxy"])
-                .status()?;
-            std::process::Command::new("git")
-                .args(&["config", "--global", "--unset", "https.proxy"])
-                .status()?;
+            self.run_git_command(&["config", "--global", "--unset", "http.proxy"])?;
+            self.run_git_command(&["config", "--global", "--unset", "https.proxy"])?;
+        }
+        Ok(())
+    }
+
+    fn run_git_command(&self, args: &[&str]) -> io::Result<()> {
+        let mut command = Command::new("git");
+        command.args(args);
+        #[cfg(target_os = "windows")]
+        {
+            command.creation_flags(0x08000000);
+        }
+        let status = command.status()?;
+        if !status.success() {
+            return Err(io::Error::new(
+                ErrorKind::Other,
+                format!("git command failed with status: {}", status),
+            ));
         }
         Ok(())
     }
