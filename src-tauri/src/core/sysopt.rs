@@ -198,12 +198,11 @@ impl Sysopt {
         let mut cur_autoproxy = self.cur_autoproxy.lock();
         let old_autoproxy = self.old_autoproxy.lock();
 
-        let (enable, git, bypass, pac) = {
+        let (enable, bypass, pac) = {
             let verge = Config::verge();
             let verge = verge.latest();
             (
                 verge.enable_system_proxy.unwrap_or(false),
-                verge.enable_git_proxy.unwrap_or(false),
                 verge.system_proxy_bypass.clone(),
                 verge.proxy_auto_config.unwrap_or(false),
             )
@@ -239,9 +238,6 @@ impl Sysopt {
             None => DEFAULT_BYPASS.into(),
         };
         sysproxy.port = port;
-        if git_installed() {
-            self.set_git_proxy(git)?;
-        }
         let mut autoproxy = cur_autoproxy.take().unwrap();
         autoproxy.url = format!("http://127.0.0.1:{pac_port}/commands/pac");
 
