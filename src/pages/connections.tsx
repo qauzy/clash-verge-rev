@@ -63,7 +63,7 @@ const ConnectionsPage = () => {
       download += x.download;
       upload += x.upload;
     });
-    return [connections, download, upload];
+    return [connections, connData.downloadTotal, connData.uploadTotal];
   }, [connData, match, curOrderOpt]);
 
   const { connect, disconnect } = useWebsocket(

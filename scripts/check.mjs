@@ -53,22 +53,22 @@ const SIDECAR_HOST = target
 
 /* ======= clash meta alpha======= */
 const META_ALPHA_VERSION_URL =
-  "https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/version.txt";
-const META_ALPHA_URL_PREFIX = `https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha`;
+  "https://github.com/qauzy/mat/releases/download/Prerelease-Alpha/version.txt";
+const META_ALPHA_URL_PREFIX = `https://github.com/qauzy/mat/releases/download/Prerelease-Alpha`;
 let META_ALPHA_VERSION;
 
 const META_ALPHA_MAP = {
-  "win32-x64": "mihomo-windows-amd64-compatible",
-  "win32-ia32": "mihomo-windows-386",
-  "win32-arm64": "mihomo-windows-arm64",
-  "darwin-x64": "mihomo-darwin-amd64-compatible",
-  "darwin-arm64": "mihomo-darwin-arm64",
-  "linux-x64": "mihomo-linux-amd64-compatible",
-  "linux-ia32": "mihomo-linux-386",
-  "linux-arm64": "mihomo-linux-arm64",
-  "linux-arm": "mihomo-linux-armv7",
-  "linux-riscv64": "mihomo-linux-riscv64",
-  "linux-loong64": "mihomo-linux-loong64",
+  "win32-x64": "mat-windows-amd64-compatible",
+  "win32-ia32": "mat-windows-386",
+  "win32-arm64": "mat-windows-arm64",
+  "darwin-x64": "mat-darwin-amd64-compatible",
+  "darwin-arm64": "mat-darwin-arm64",
+  "linux-x64": "mat-linux-amd64-compatible",
+  "linux-ia32": "mat-linux-386",
+  "linux-arm64": "mat-linux-arm64",
+  "linux-arm": "mat-linux-armv7",
+  "linux-riscv64": "mat-linux-riscv64",
+  "linux-loong64": "mat-linux-loong64",
 };
 
 // Fetch the latest alpha release version from the version.txt file
@@ -100,22 +100,22 @@ async function getLatestAlphaVersion() {
 
 /* ======= clash meta stable ======= */
 const META_VERSION_URL =
-  "https://github.com/MetaCubeX/mihomo/releases/latest/download/version.txt";
-const META_URL_PREFIX = `https://github.com/MetaCubeX/mihomo/releases/download`;
+  "https://github.com/qauzy/mat/releases/latest/download/version.txt";
+const META_URL_PREFIX = `https://github.com/qauzy/mat/releases/download`;
 let META_VERSION;
 
 const META_MAP = {
-  "win32-x64": "mihomo-windows-amd64-compatible",
-  "win32-ia32": "mihomo-windows-386",
-  "win32-arm64": "mihomo-windows-arm64",
-  "darwin-x64": "mihomo-darwin-amd64-compatible",
-  "darwin-arm64": "mihomo-darwin-arm64",
-  "linux-x64": "mihomo-linux-amd64-compatible",
-  "linux-ia32": "mihomo-linux-386",
-  "linux-arm64": "mihomo-linux-arm64",
-  "linux-arm": "mihomo-linux-armv7",
-  "linux-riscv64": "mihomo-linux-riscv64",
-  "linux-loong64": "mihomo-linux-loong64",
+  "win32-x64": "mat-windows-amd64-compatible",
+  "win32-ia32": "mat-windows-386",
+  "win32-arm64": "mat-windows-arm64",
+  "darwin-x64": "mat-darwin-amd64-compatible",
+  "darwin-arm64": "mat-darwin-arm64",
+  "linux-x64": "mat-linux-amd64-compatible",
+  "linux-ia32": "mat-linux-386",
+  "linux-arm64": "mat-linux-arm64",
+  "linux-arm": "mat-linux-armv7",
+  "linux-riscv64": "mat-linux-riscv64",
+  "linux-loong64": "mat-linux-loong64",
 };
 
 // Fetch the latest release version from the version.txt file
